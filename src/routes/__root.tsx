@@ -29,7 +29,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Атлас — мобильные туалетные кабины" }, 
+      { title: "Атлас — мобильные туалетные кабины" },
       { name: "description", content: "Продажа и аренда биотуалетов с обслуживанием в Москве и области" },
       { name: "author", content: "Атлас" },
       { property: "og:title", content: "Атлас" },
@@ -43,8 +43,13 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: appCss,
       },
-      // Сюда можно добавить ссылку на фавикон, когда сделаешь свой
-      { rel: "icon", href: "/favicon.ico" },
+      {
+        rel: "icon",
+        // Указываем путь к твоему новому файлу
+        href: "/tualetka.avif",
+        // Указываем тип, чтобы браузер быстрее сообразил, как это рендерить
+        type: "image/avif",
+      },
     ],
   }),
   shellComponent: RootShell,
