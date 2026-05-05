@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"] # Деплой будет запускаться при каждом пуше в main
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Install dependencies
@@ -28,13 +28,20 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Post-build Fix
+        run: |
+          # Если index.html не создался в корне dist/client, 
+          # попробуем найти его и скопировать для GitHub Pages
+          cp dist/client/index.html dist/client/404.html || echo "index.html not found, checking structure..."
+          ls -R dist/client
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist/client' # Vite собирает проект в папку dist
+          path: './dist/client'
 
       - name: Deploy to GitHub Pages
         id: deployment
