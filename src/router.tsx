@@ -62,7 +62,7 @@ export const getRouter = () => {
     defaultPreloadStaleTime: 0,
     defaultErrorComponent: DefaultErrorComponent,
     // Критически важно для GitHub Pages
-    basepath: "/mobile-comfort-hub",
+    basepath: "/mobile-comfort-hub/",
   });
 
   return router;

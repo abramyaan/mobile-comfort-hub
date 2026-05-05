@@ -1,25 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider } from '@tanstack/react-router'
-import { getRouter } from './router'
-import './styles.css'
 
-const router = getRouter()
-
-// Регистрируем типы для автодополнения (полезно для разработки)
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router
-  }
-}
-
+// Временный тест без роутера
 const rootElement = document.getElementById('root')!
+const root = ReactDOM.createRoot(rootElement)
 
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement)
-  root.render(
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>,
-  )
-}
+root.render(
+  <div style={{ padding: '20px', background: 'white', color: 'black' }}>
+    <h1>Проверка сборки</h1>
+    <p>Если ты это видишь, значит Vite и GitHub Pages настроены верно.</p>
+  </div>
+)
