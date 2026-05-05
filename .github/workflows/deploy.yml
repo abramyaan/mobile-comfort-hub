@@ -28,21 +28,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Debug Output Structure
+      - name: Prepare Static Files
+        id: prepare # Добавили ID, чтобы обращаться к результатам этого шага
         run: |
-          echo "==== КОРЕНЬ ПРОЕКТА ===="
-          ls -F
-          echo "==== ИЩЕМ ВСЕ ПАПКИ 'dist' или '.output' ===="
-          find . -maxdepth 2 -type d
-          echo "==== СОДЕРЖИМОЕ ПАПКИ .output (если есть) ===="
-          ls -R .output 2>/dev/null || echo "Папка .output не найдена"
-          echo "==== СОДЕРЖИМОЕ ПАПКИ dist (если есть) ===="
-          ls -R dist 2>/dev/null || echo "Папка dist не найдена"
-
-      - name: Prepare Files
-        run: |
-          # Пытаемся найти, куда упал билд. 
-          # Для TanStack Start часто это .output/public
+          # 1. Определяем директорию билда
           if [ -d ".output/public" ]; then
             DEST=".output/public"
           elif [ -d "dist/client" ]; then
@@ -51,18 +40,30 @@ jobs:
             DEST="dist"
           fi
           
-          echo "Используем директорию: $DEST"
-          
-          # Если там нет index.html, попробуем найти его и скопировать туда
-          if [ ! -f "$DEST/index.html" ]; then
-            find . -name "index.html" -not -path "./node_modules/*" -exec cp {} $DEST/ \;
+          echo "Found static files in: $DEST"
+
+          # 2. Переходим в папку
+          cd $DEST || exit 1
+
+          # 3. Фикс index.html
+          if [ ! -f index.html ]; then
+            echo "Searching for index.html..."
+            # Ищем index.html в подпапках и копируем в корень DEST
+            ACTUAL_INDEX=$(find . -name "index.html" | head -n 1)
+            if [ -n "$ACTUAL_INDEX" ]; then
+              cp "$ACTUAL_INDEX" ./index.html
+            fi
+          fi
+
+          # 4. Фикс для роутинга GitHub Pages
+          if [ -f index.html ]; then
+            cp index.html 404.html
           fi
           
-          cd $DEST
-          cp index.html 404.html
           touch .nojekyll
-          # Сохраняем путь для следующего шага
-          echo "FINAL_PATH=$DEST" >> $GITHUB_ENV
+          
+          # Сохраняем путь в output шага (это уберет предупреждение в VS Code)
+          echo "publish_path=$DEST" >> $GITHUB_OUTPUT
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -70,7 +71,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ env.FINAL_PATH }}
+          # Используем путь через outputs, теперь VS Code поймет это
+          path: ${{ steps.prepare.outputs.publish_path }}
 
       - name: Deploy to GitHub Pages
         id: deployment
