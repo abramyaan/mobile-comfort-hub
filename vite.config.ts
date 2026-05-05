@@ -1,14 +1,19 @@
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  vite: {
-    // Важно: слэши с обеих сторон для GitHub Pages
-    base: "/mobile-comfort-hub/", 
-    build: {
-      outDir: "dist/client",
-      minify: true, // Оставляем, это полезно для скорости
-      // Можно добавить sourcemap: true, если захочешь дебажить ошибки прямо на сайте
-      sourcemap: false, 
-    },
+  plugins: [
+    // В твоей версии это вызывается напрямую как функция
+    TanStackRouterVite(), 
+    react(),
+    tsconfigPaths(),
+  ],
+  base: "/mobile-comfort-hub/",
+  build: {
+    outDir: "dist",
+    minify: true,
+    sourcemap: false,
   },
 });

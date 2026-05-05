@@ -29,40 +29,10 @@ jobs:
         run: npm run build
 
       - name: Prepare Static Files
-        id: prepare
         run: |
-          echo "Looking for the BUILT index.html..."
-          
-          # Ищем index.html в подпапках, игнорируя корень (.) и node_modules
-          # Это найдет файл внутри .output или dist
-          BUILT_INDEX=$(find . -mindepth 2 -name "index.html" -not -path "./node_modules/*" | head -n 1)
-          
-          if [ -z "$BUILT_INDEX" ]; then
-            echo "Error: Could not find a built index.html in subdirectories."
-            echo "Checking common locations..."
-            if [ -f "dist/client/index.html" ]; then BUILT_INDEX="dist/client/index.html";
-            elif [ -f ".output/public/index.html" ]; then BUILT_INDEX=".output/public/index.html";
-            fi
-          fi
-
-          if [ -z "$BUILT_INDEX" ]; then
-            echo "CRITICAL: No built index.html found. Using root index.html as fallback (risky)."
-            # Если билд вообще не создал HTML (SSR mode), берем корневой и надеемся на лучшее
-            DEST_DIR="dist"
-            mkdir -p $DEST_DIR
-            cp index.html $DEST_DIR/
-          else
-            DEST_DIR=$(dirname "$BUILT_INDEX")
-            echo "Success! Found built output in: $DEST_DIR"
-          fi
-
-          # Подготовка папки к деплою
-          cd "$DEST_DIR"
+          cd dist
           cp index.html 404.html
           touch .nojekyll
-          
-          # Передаем абсолютный путь в артефакты
-          echo "publish_path=$(pwd)" >> $GITHUB_OUTPUT
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -70,7 +40,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ steps.prepare.outputs.publish_path }}
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
