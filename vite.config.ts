@@ -5,18 +5,19 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   plugins: [
-    // Убираем basepath отсюда, оставляем только базовые настройки
     TanStackRouterVite({
       routesDirectory: "./src/routes",
       generatedRouteTree: "./src/routeTree.gen.ts",
+      // Заменяем проблемный experimental флаг на новый стабильный
+      autoCodeSplitting: true, 
     }),
     react(),
     tsconfigPaths(),
   ],
-  // Это главный параметр для GitHub Pages
   base: "/mobile-comfort-hub/",
   build: {
     outDir: "dist",
+    emptyOutDir: true,
     minify: true,
     sourcemap: false,
   },

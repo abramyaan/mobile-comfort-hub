@@ -1,6 +1,18 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
 
-import appCss from "../styles.css?url";
+export const Route = createRootRoute({
+  component: RootComponent,
+  notFoundComponent: NotFoundComponent,
+});
+
+function RootComponent() {
+  return (
+    <>
+      <Outlet />
+      {/* TanStack Router DevTools можно добавить сюда при желании */}
+    </>
+  );
+}
 
 function NotFoundComponent() {
   return (
@@ -16,61 +28,10 @@ function NotFoundComponent() {
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            На главную
           </Link>
         </div>
       </div>
     </div>
   );
-}
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Атлас — мобильные туалетные кабины" },
-      { name: "description", content: "Продажа и аренда биотуалетов с обслуживанием в Москве и области" },
-      { name: "author", content: "Атлас" },
-      { property: "og:title", content: "Атлас" },
-      { property: "og:description", content: "Аренда и продажа мобильных туалетных кабин" },
-      { property: "og:type", content: "website" },
-      // Удаляем или меняем Twitter данные
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      {
-        rel: "icon",
-        // Указываем путь к твоему новому файлу
-        href: "/tualetka.avif",
-        // Указываем тип, чтобы браузер быстрее сообразил, как это рендерить
-        type: "image/avif",
-      },
-    ],
-  }),
-  shellComponent: RootShell,
-  component: RootComponent,
-  notFoundComponent: NotFoundComponent,
-});
-
-function RootShell({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
-
-function RootComponent() {
-  return <Outlet />;
 }
