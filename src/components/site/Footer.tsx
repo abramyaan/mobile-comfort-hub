@@ -6,8 +6,8 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-3 md:px-8">
         <div>
           <div className="flex items-center gap-2">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground font-black">ЭК</div>
-            <span className="text-lg font-bold">ЭкоКабина</span>
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground font-black">Atlas</div>
+            <span className="text-lg font-bold">Atlas</span>
           </div>
           <p className="mt-4 max-w-xs text-sm text-muted-foreground">
             Производство, аренда и обслуживание мобильных туалетных кабин с 2018 года.
@@ -38,7 +38,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-border py-5 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} ЭкоКабина. Все права защищены.
+        © {new Date().getFullYear()} Атлас. Все права защищены.
       </div>
     </footer>
   );
