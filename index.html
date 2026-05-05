@@ -11,12 +11,15 @@
     <meta property="og:description" content="Аренда и продажа мобильных туалетных кабин" />
     <meta property="og:type" content="website" />
     
-    <!-- Фавиконка (убрали начальный слэш) -->
-    <link rel="icon" type="image/avif" href="tualetka.avif" />
+    <!-- Фавиконка: используем относительный путь от корня проекта -->
+    <!-- Убедись, что файл tualetka.avif лежит в папке public -->
+    <link rel="icon" type="image/avif" href="/tualetka.avif" />
   </head>
   <body>
     <div id="root"></div>
-    <!-- Путь к скрипту тоже относительный -->
-    <script type="module" src="src/main.tsx"></script>
+    
+    <!-- Важно: путь должен начинаться со слеша от корня проекта, -->
+    <!-- Vite сам заменит его на путь к билду с учетом base: "/mobile-comfort-hub/" -->
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
