@@ -28,16 +28,41 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Post-build Fix
+      - name: Debug Output Structure
         run: |
-          # Переходим в папку с собранным клиентом
-          cd dist/client
+          echo "==== КОРЕНЬ ПРОЕКТА ===="
+          ls -F
+          echo "==== ИЩЕМ ВСЕ ПАПКИ 'dist' или '.output' ===="
+          find . -maxdepth 2 -type d
+          echo "==== СОДЕРЖИМОЕ ПАПКИ .output (если есть) ===="
+          ls -R .output 2>/dev/null || echo "Папка .output не найдена"
+          echo "==== СОДЕРЖИМОЕ ПАПКИ dist (если есть) ===="
+          ls -R dist 2>/dev/null || echo "Папка dist не найдена"
+
+      - name: Prepare Files
+        run: |
+          # Пытаемся найти, куда упал билд. 
+          # Для TanStack Start часто это .output/public
+          if [ -d ".output/public" ]; then
+            DEST=".output/public"
+          elif [ -d "dist/client" ]; then
+            DEST="dist/client"
+          else
+            DEST="dist"
+          fi
           
-          # Создаем 404.html на основе index.html для поддержки роутинга
+          echo "Используем директорию: $DEST"
+          
+          # Если там нет index.html, попробуем найти его и скопировать туда
+          if [ ! -f "$DEST/index.html" ]; then
+            find . -name "index.html" -not -path "./node_modules/*" -exec cp {} $DEST/ \;
+          fi
+          
+          cd $DEST
           cp index.html 404.html
-          
-          # Отключаем Jekyll
           touch .nojekyll
+          # Сохраняем путь для следующего шага
+          echo "FINAL_PATH=$DEST" >> $GITHUB_ENV
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -45,7 +70,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist/client'
+          path: ${{ env.FINAL_PATH }}
 
       - name: Deploy to GitHub Pages
         id: deployment
