@@ -61,7 +61,7 @@ export const getRouter = () => {
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
     defaultErrorComponent: DefaultErrorComponent,
-    // Указываем путь к репозиторию
+    // Критически важно для GitHub Pages
     basepath: "/mobile-comfort-hub",
   });
 

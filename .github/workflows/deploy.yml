@@ -30,10 +30,40 @@ jobs:
 
       - name: Post-build Fix
         run: |
-          # Если index.html не создался в корне dist/client, 
-          # попробуем найти его и скопировать для GitHub Pages
-          cp dist/client/index.html dist/client/404.html || echo "index.html not found, checking structure..."
-          ls -R dist/client
+          # Переходим в директорию билда
+          # TanStack Start обычно кладет клиентские файлы в dist/client
+          cd dist/client || exit 1
+
+          # 1. Если index.html нет, создаем его вручную
+          if [ ! -f index.html ]; then
+            echo "Index.html not found, creating from template..."
+            
+            # Ищем главный JS файл (в Vite 7 он обычно в assets/index-HASH.js)
+            JS_PATH=$(find assets -name "index-*.js" | head -n 1)
+            CSS_PATH=$(find assets -name "index-*.css" | head -n 1)
+            
+            cat <<EOF > index.html
+          <!DOCTYPE html>
+          <html lang="ru">
+            <head>
+              <meta charset="UTF-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+              <title>Атлас — мобильные туалетные кабины</title>
+              <link rel="stylesheet" href="/mobile-comfort-hub/${CSS_PATH}">
+            </head>
+            <body>
+              <div id="root"></div>
+              <script type="module" src="/mobile-comfort-hub/${JS_PATH}"></script>
+            </body>
+          </html>
+          EOF
+          fi
+
+          # 2. Делаем копию для роутинга (чтобы 404 не вылетало)
+          cp index.html 404.html
+          
+          # 3. Отключаем Jekyll
+          touch .nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
