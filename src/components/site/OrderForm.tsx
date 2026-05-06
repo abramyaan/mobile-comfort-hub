@@ -3,9 +3,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { MapPin, Phone } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
+
+// Импорт аватаров для отзывов
+import otziv1 from "@/assets/otziv1.jpg";
+import otziv2 from "@/assets/otziv2.jpg";
+import otziv3 from "@/assets/otziv3.jpg";
 
 export type OrderFormHandle = { setProduct: (name: string) => void };
+
+const reviews = [
+  {
+    name: "Юрий Инкин",
+    image: otziv1,
+    text: "Хочу выразить огромную благодарность Максиму за отличную работу, за оперативность, за быструю доставку. Человек всегда на связи, все объясняет. И хочу отметить Владимира, это человек, который нам привез нашу кабину — милейший, юморной и добрый человек. Спасибо вам большое"
+  },
+  {
+    name: "Татьяна Пушилова",
+    image: otziv2,
+    text: "Заказала туалет. Выбрала. Быстро договорились и привезли на следующий день. Поставили на нужное место. Спасибо. Продавца рекомендую"
+  },
+  {
+    name: "Валентин Егоров",
+    image: otziv3,
+    text: "Заказал новую кабинку на дачу. Привезли, помогли поставить. Дефектов нет. Внутри кабинки нет никаких сквозняков. Качеством и доставкой доволен. Рекомендую!"
+  }
+];
 
 export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
   const [name, setName] = useState("");
@@ -71,21 +94,44 @@ export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
   return (
     <section id="order" ref={sectionRef} className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
+        
+        {/* БЛОК ОТЗЫВОВ[cite: 9, 11] */}
+        <div className="mb-16">
+          <h2 className="mb-10 text-3xl font-black md:text-5xl text-center">Отзывы наших клиентов</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {reviews.map((r, i) => (
+              <div key={i} className="flex flex-col rounded-[2rem] border border-border bg-card p-6 shadow-sm">
+                <div className="flex items-center gap-4 mb-4">
+                  <img src={r.image} alt={r.name} className="h-14 w-14 rounded-full object-cover border-2 border-primary/20" />
+                  <div>
+                    <p className="font-bold text-lg leading-tight">{r.name}</p>
+                    <div className="flex text-yellow-500 mt-1">
+                      {[...Array(5)].map((_, j) => <Star key={j} className="h-3 w-3 fill-current" />)}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground italic leading-relaxed">"{r.text}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* КАРТА И ФОРМА[cite: 9, 11] */}
         <div className="overflow-hidden rounded-[3rem] bg-card border border-border shadow-2xl">
           <div className="grid md:grid-cols-2">
             
-            {/* КАРТА СЛЕВА (СПб, пос. Тельмана) */}
+            {/* КАРТА СЛЕВА (СПб, пос. Тельмана)[cite: 11] */}
             <div className="relative min-h-[450px] bg-muted">
               <iframe 
-                src="https://yandex.ru/map-widget/v1/?ll=30.604206%2C59.716912&z=16&mode=whatshere&whatshere%5Bpoint%5D=30.603908%2C59.717133"
+                src="https://yandex.ru/map-widget/v1/?ll=30.603908%2C59.717133&z=16&pt=30.603908%2C59.717133,pm2rdm"
                 className="absolute inset-0 h-full w-full grayscale-[0.2]"
                 frameBorder="0"
                 allowFullScreen
               />
-              <div className="absolute bottom-6 left-6 right-6 rounded-2xl bg-background/95 p-5 backdrop-blur-md shadow-xl border border-border md:bottom-8 md:left-8 md:right-8">
+              <div className="absolute bottom-10 left-6 right-6 rounded-2xl bg-background/95 p-5 backdrop-blur-md shadow-xl border border-border md:bottom-8 md:left-8 md:right-8">
                 <div className="flex items-start gap-3">
                   <div className="rounded-full bg-primary/10 p-2 text-primary">
-                    <MapPin className="h-5 w-5" />
+                    <MapPin className="h-6 w-6" />
                   </div>
                   <div>
                     <p className="font-bold text-foreground">Наш склад в СПб:</p>
@@ -97,7 +143,7 @@ export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
               </div>
             </div>
 
-            {/* ФОРМА ЗАЯВКИ СПРАВА */}
+            {/* ФОРМА ЗАЯВКИ СПРАВА[cite: 9] */}
             <div className="bg-primary p-8 md:p-14 text-primary-foreground">
               <div className="max-w-md mx-auto md:mx-0">
                 <h2 className="text-4xl font-black leading-tight md:text-5xl">Оставьте заявку</h2>
