@@ -1,6 +1,6 @@
 import { Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import hero from "@/assets/hero-cabins.jpg";
+import hero from "@/assets/hero-cabinos.jpg";
 
 export function Hero() {
   return (
@@ -14,7 +14,7 @@ export function Hero() {
             Мобильные<br />туалетные кабины
           </h1>
           <p className="mt-6 max-w-xl text-lg text-muted-foreground md:text-xl">
-            Мы — производитель и поставщик биотуалетов с 7-летним опытом. Доставляем по Москве и области, обслуживаем парк, продаём и сдаём в аренду на любой срок.
+            Мы — производитель и поставщик биотуалетов с 7-летним опытом. Доставляем по Санкт-Петербургу и Ленинградской области, обслуживаем парк, продаём и сдаём в аренду на любой срок.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg" className="h-14 px-7 text-base">

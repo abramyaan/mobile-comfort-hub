@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { Menu, X, Phone, Send, MessageCircle } from "lucide-react";
+import { Menu, X } from "lucide-react"; // Удалили Send и MessageSquare
 import { Button } from "@/components/ui/button";
+
+// Импорт твоих иконок из assets
+import tgIcon from "@/assets/tg.png";
+import maxIcon from "@/assets/max.png";
 
 const PHONE = "+7 (903) 097-60-05";
 const PHONE_HREF = "tel:+79030976005";
 const TG = "https://t.me/";
-const MAX = "https://max.ru/";
+const MAX = "https://yandex.ru/images/search?..."; // Твоя ссылка
 
 const links = [
   { href: "#home", label: "Главная" },
@@ -20,103 +24,97 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
         
-        {/* Логотип и Дескриптор */}
-        <a href="#home" className="flex items-center gap-4 group">
-          <div className="flex items-center gap-2">
-            <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-primary-foreground font-black transition-transform group-hover:scale-105">
-              Atlas
-            </div>
-            
+        {/* Логотип */}
+        <a href="#home" className="flex items-center gap-2 group shrink-0">
+          <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground font-black transition-transform group-hover:scale-105 sm:h-10 sm:w-10">
+            A
           </div>
-
-          {/* Вертикальный разделитель (виден только на десктопе) */}
-          <div className="hidden h-8 w-[1px] bg-border md:block" />
-
-          {/* Текст дескриптора (виден только на десктопе) */}
-          <div className="hidden max-w-[160px] text-[10px] leading-tight text-muted-foreground uppercase tracking-widest font-semibold md:block">
-            Продажа и аренда мобильных туалетных кабин
-          </div>
+          <span className="text-lg font-black tracking-tighter text-primary sm:text-xl">АТЛАС</span>
         </a>
 
-        {/* Навигация (десктоп) */}
-        <nav className="hidden items-center gap-6 lg:flex">
+        {/* Контакты на МОБИЛКАХ (Иконки заменены на img) */}
+        <div className="flex items-center gap-5 lg:hidden ml-auto mr-2">
+          <a 
+            href={PHONE_HREF} 
+            className="text-[14px] font-bold text-foreground bg-secondary/50 px-2 py-1.5 rounded-lg sm:text-sm whitespace-nowrap"
+          >
+            {PHONE}
+          </a>
+          <div className="flex items-center gap-2.5 ml-1">
+            <a href={TG} target="_blank" className="active:opacity-70">
+              <img src={tgIcon} alt="Telegram" className="h-7 w-22 object-contain rounded-lg" />
+            </a>
+            <a href={MAX} target="_blank" className="active:opacity-70">
+              <img src={maxIcon} alt="MAX" className="h-7 w-22 object-contain rounded-lg shadow-sm" />
+            </a>
+          </div>
+        </div>
+
+        {/* Навигация и иконки (ДЕКСТОП - Иконки заменены на img) */}
+        <nav className="hidden items-center gap-6 lg:flex ml-8">
           {links.map((l) => (
             <a 
               key={l.href} 
               href={l.href} 
-              className="text-sm font-medium text-foreground/70 transition-colors hover:text-primary"
+              className="text-sm font-medium text-foreground/70 transition-colors hover:text-primary whitespace-nowrap"
             >
               {l.label}
             </a>
           ))}
+          
+          <div className="flex items-center gap-3 border-l border-border pl-6">
+            <a href={TG} target="_blank" className="opacity-80 hover:opacity-100 transition-opacity" title="Telegram">
+              <img src={tgIcon} alt="Telegram" className="h-7 w-14 object-contain rounded-lg" />
+            </a>
+            <a href={MAX} target="_blank" className="opacity-80 hover:opacity-100 transition-opacity" title="MAX">
+              <img src={maxIcon} alt="MAX" className="h-7 w-7 object-contain rounded-lg shadow-sm" />
+            </a>
+          </div>
         </nav>
 
-        {/* Контакты (десктоп)[cite: 1] */}
-        <div className="hidden items-center gap-4 lg:flex">
+        {/* Номер и кнопка (ДЕКСТОП) */}
+        <div className="hidden items-center gap-6 lg:flex">
           <a 
             href={PHONE_HREF} 
-            className="text-base font-bold text-foreground transition-colors hover:text-primary"
+            className="text-base font-bold text-foreground transition-colors hover:text-primary whitespace-nowrap"
           >
             {PHONE}
           </a>
-          <Button asChild size="default" className="rounded-full shadow-lg shadow-primary/20">
-            <a href="#order">Заказать звонок</a>
+          <Button asChild size="sm" className="rounded-full px-6 shadow-lg shadow-primary/20">
+            <a href="#order">Заказать</a>
           </Button>
         </div>
 
-        {/* Кнопка мобильного меню */}
+        {/* Бургер */}
         <button
           onClick={() => setOpen((v) => !v)}
-          className="lg:hidden grid h-10 w-10 place-items-center rounded-xl border border-border bg-card transition-colors hover:bg-accent"
+          className="lg:hidden grid h-9 w-9 place-items-center rounded-xl border border-border bg-card transition-colors"
           aria-label="Меню"
         >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>
       </div>
 
-      {/* Мобильное меню[cite: 1] */}
+      {/* Мобильное меню[cite: 12] */}
       {open && (
-        <div className="lg:hidden border-t border-border bg-background animate-in fade-in slide-in-from-top-2 duration-300">
-          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-6">
+        <div className="lg:hidden border-t border-border bg-background animate-in fade-in slide-in-from-top-2">
+          <div className="px-4 py-6 space-y-1">
             {links.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-4 py-3 text-lg font-medium transition-colors hover:bg-secondary"
+                className="block rounded-lg px-4 py-3 text-lg font-medium hover:bg-secondary"
               >
                 {l.label}
               </a>
             ))}
-            
-            <div className="mt-4 flex flex-col gap-3 border-t border-border pt-4">
-              <a 
-                href={PHONE_HREF} 
-                className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 text-lg font-bold text-primary-foreground shadow-lg shadow-primary/20"
-              >
-                <Phone className="h-5 w-5" /> {PHONE}
-              </a>
-              
-              <div className="flex gap-2">
-                <a 
-                  href={TG} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 font-semibold transition-colors hover:bg-accent"
-                >
-                  <Send className="h-5 w-5 text-[#229ED9]" /> Telegram
-                </a>
-                <a 
-                  href={MAX} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 font-semibold transition-colors hover:bg-accent"
-                >
-                  <MessageCircle className="h-5 w-5 text-[#25D366]" /> WhatsApp
-                </a>
-              </div>
+            <div className="pt-4 mt-4 border-t border-border">
+              <Button asChild className="w-full h-12 rounded-xl text-base font-bold">
+                <a href="#order">Оставить заявку</a>
+              </Button>
             </div>
           </div>
         </div>
