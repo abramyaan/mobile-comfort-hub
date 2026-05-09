@@ -36,12 +36,22 @@ export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
   const [product, setProduct] = useState("");
   const [honeypot, setHoneypot] = useState(""); 
   const [startTime, setStartTime] = useState(0); 
+  
+  // Реф для всей секции (нужен для id="order")
   const sectionRef = useRef<HTMLElement>(null);
+  // НОВЫЙ реф специально для элемента формы, чтобы прокручивать мимо отзывов
+  const formElementRef = useRef<HTMLFormElement>(null);
 
   useImperativeHandle(ref, () => ({
     setProduct: (n: string) => {
       setProduct(n);
-      setTimeout(() => sectionRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+      // Скроллим именно к форме через небольшой таймаут
+      setTimeout(() => {
+        formElementRef.current?.scrollIntoView({ 
+          behavior: "smooth", 
+          block: "center" // Центрируем форму на экране
+        });
+      }, 50);
     },
   }));
 
@@ -95,7 +105,7 @@ export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
     <section id="order" ref={sectionRef} className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         
-        {/* БЛОК ОТЗЫВОВ[cite: 9, 11] */}
+        {/* БЛОК ОТЗЫВОВ */}
         <div className="mb-16">
           <h2 className="mb-10 text-3xl font-black md:text-5xl text-center">Отзывы наших клиентов</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -116,11 +126,11 @@ export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
           </div>
         </div>
 
-        {/* КАРТА И ФОРМА[cite: 9, 11] */}
+        {/* КАРТА И ФОРМА */}
         <div className="overflow-hidden rounded-[3rem] bg-card border border-border shadow-2xl">
           <div className="grid md:grid-cols-2">
             
-            {/* КАРТА СЛЕВА (СПб, пос. Тельмана)[cite: 11] */}
+            {/* КАРТА СЛЕВА */}
             <div className="relative min-h-[450px] bg-muted">
               <iframe 
                 src="https://yandex.ru/map-widget/v1/?ll=30.603908%2C59.717133&z=16&pt=30.603908%2C59.717133,pm2rdm"
@@ -143,7 +153,7 @@ export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
               </div>
             </div>
 
-            {/* ФОРМА ЗАЯВКИ СПРАВА[cite: 9] */}
+            {/* ФОРМА ЗАЯВКИ СПРАВА */}
             <div className="bg-primary p-8 md:p-14 text-primary-foreground">
               <div className="max-w-md mx-auto md:mx-0">
                 <h2 className="text-4xl font-black leading-tight md:text-5xl">Оставьте заявку</h2>
@@ -151,7 +161,12 @@ export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
                   Свяжитесь с нами для консультации или заказа. Перезвоним в течение 15 минут!
                 </p>
                 
-                <form onSubmit={submit} className="mt-10 space-y-4 rounded-[2rem] bg-background p-8 text-foreground shadow-xl relative">
+                {/* Привязываем formElementRef к самому тегу формы */}
+                <form 
+                  ref={formElementRef}
+                  onSubmit={submit} 
+                  className="mt-10 space-y-4 rounded-[2rem] bg-background p-8 text-foreground shadow-xl relative"
+                >
                   <input type="text" className="hidden" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} tabIndex={-1} />
                   
                   {product && (
