@@ -26,34 +26,36 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
         
         {/* ЛЕВАЯ ЧАСТЬ: Логотип */}
-        <div className="z-10">
-          <a href="#home" className="flex items-center group shrink-0">
-            <div className="grid h-9 min-w-[75px] px-3 place-items-center rounded-xl bg-primary text-primary-foreground font-black text-sm transition-transform group-hover:scale-105 sm:h-10">
+        <div className="flex items-center shrink-0">
+          <a href="#home" className="flex items-center group">
+            <div className="grid h-9 px-3 place-items-center rounded-xl bg-primary text-primary-foreground font-black text-sm transition-transform group-hover:scale-105 sm:h-10">
               Атлас
             </div>
           </a>
         </div>
 
-        {/* ЦЕНТРАЛЬНАЯ ЧАСТЬ: Номер (всегда по центру экрана) */}
-        <div className="absolute left-1/2 -translate-x-1/2 z-0">
+        {/* ЦЕНТРАЛЬНАЯ ЧАСТЬ: Номер телефона */}
+        {/* Изменено: на мобилках скрываем или уменьшаем, на больших экранах центрируем через flex-1 и text-center */}
+        <div className="flex-1 px-2 text-center lg:absolute lg:left-1/2 lg:-translate-x-1/2">
           <a 
             href={PHONE_HREF} 
-            className="text-[15px] font-bold text-foreground bg-secondary/50 px-3 py-1.5 rounded-lg whitespace-nowrap sm:text-sm"
+            className="inline-block text-[12px] font-bold text-foreground bg-secondary/50 px-2 py-1.5 rounded-lg whitespace-nowrap min-[390px]:text-[14px] sm:text-sm"
           >
             {PHONE}
           </a>
         </div>
 
-        {/* ПРАВАЯ ЧАСТЬ: Иконки + Бургер (на мобилках) / Иконки + Навигация (на ПК) */}
-        <div className="flex items-center gap-2 z-10">
+        {/* ПРАВАЯ ЧАСТЬ: Иконки + Меню */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           
-          {/* Иконки мессенджеров (видны всегда: и на мобилках, и на ПК) */}
-          <div className="flex items-center gap-0 mr-0">
+          {/* Иконки мессенджеров */}
+          <div className="flex items-center">
             <a href={TG} target="_blank" className="active:opacity-70 transition-opacity hover:opacity-80">
-              <img src={tgIcon} alt="TG" className="h-8 w-15 object-contain sm:h-10 sm:w-10 lg:h-9 lg:w-15" />
+              {/* Уменьшил ширину иконок для мобильных (h-7 w-7) */}
+              <img src={tgIcon} alt="TG" className="h-9 w-14 object-contain sm:h-9 sm:w-9" />
             </a>
             <a href={MAX} target="_blank" className="active:opacity-70 transition-opacity hover:opacity-80">
-              <img src={maxIcon} alt="MAX" className="h-7 w-7 object-contain sm:h-8 sm:w-8 lg:h-8 lg:w-8" />
+              <img src={maxIcon} alt="MAX" className="h-7 w-7 object-contain sm:h-8 sm:w-8" />
             </a>
           </div>
 
@@ -88,7 +90,7 @@ export function Header() {
 
       </div>
 
-      {/* Мобильное меню (выпадающее) */}
+      {/* Мобильное меню */}
       {open && (
         <div className="lg:hidden border-t border-border bg-background animate-in fade-in slide-in-from-top-2">
           <div className="px-4 py-6 space-y-1">
