@@ -77,45 +77,52 @@ export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
 
   // ФУНКЦИЯ ОТПРАВКИ НАПРЯМУЮ В ТЕЛЕГРАМ
   const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const phoneDigits = phone.replace(/\D/g, "");
-    
-    if (honeypot) return; 
-    if (name.trim().length < 2) {
-      toast.error("Введите корректное имя");
-      return;
-    }
-    if (phoneDigits.length !== 11) {
-      toast.error("Номер должен содержать 11 цифр");
-      return;
-    }
+  e.preventDefault();
+  const phoneDigits = phone.replace(/\D/g, "");
+  
+  if (honeypot) return; 
+  if (name.trim().length < 2) {
+    toast.error("Введите корректное имя");
+    return;
+  }
+  if (phoneDigits.length !== 11) {
+    toast.error("Номер должен содержать 11 цифр");
+    return;
+  }
 
-    const message = `🔔 **НОВАЯ ЗАЯВКА С САЙТА**\n\n👤 Имя: ${name}\n📱 Телефон: ${phone}\n📦 Товар: ${product || "Не выбран"}`;
+  // Убираем Markdown разметку (**), чтобы исключить ошибку парсинга
+  const message = `НОВАЯ ЗАЯВКА С САЙТА\n\nИмя: ${name}\nТелефон: ${phone}\nТовар: ${product || "Не выбран"}`;
 
-    try {
-      const response = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text: message,
-          parse_mode: "Markdown"
-        }),
-      });
+  try {
+    const url = `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message,
+        // parse_mode: "Markdown" // УДАЛИ ЭТУ СТРОКУ для теста
+      }),
+    });
 
-      if (response.ok) {
-        toast.success("Заявка успешно отправлена в группу!");
-        setName("");
-        setPhone("+7 ");
-        setProduct("");
-      } else {
-        toast.error("Ошибка при отправке в Telegram");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Нет интернет-соединения");
+    const result = await response.json();
+    console.log("Результат от Telegram:", result); // СМОТРИ СЮДА В КОНСОЛИ
+
+    if (response.ok && result.ok) {
+      toast.success("Заявка успешно отправлена в группу!");
+      setName("");
+      setPhone("+7 ");
+      setProduct("");
+    } else {
+      // Если Telegram вернул 400, здесь будет написано почему
+      console.error("Детали ошибки:", result.description);
+      toast.error(`Ошибка: ${result.description}`);
     }
-  };
+  } catch (error) {
+    console.error("Ошибка запроса:", error);
+    toast.error("Ошибка сети");
+  }
+};
 
   return (
     <section id="order" className="py-20 md:py-28">

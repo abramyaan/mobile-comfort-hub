@@ -12,7 +12,7 @@ load_dotenv()
 TOKEN = os.getenv("TOKEN")
 SITE_URL = "https://abramyaan.github.io/mobile-comfort-hub"
 # ID твоей группы
-GROUP_ID = -5177306707 
+GROUP_ID = -1005177306707 
 
 if not TOKEN:
     raise ValueError("Ошибка: Переменная TOKEN не установлена!")
