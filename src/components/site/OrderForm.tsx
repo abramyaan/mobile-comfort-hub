@@ -89,9 +89,16 @@ export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
     toast.error("Номер должен содержать 11 цифр");
     return;
   }
-
-  // Убираем Markdown разметку (**), чтобы исключить ошибку парсинга
-  const message = `НОВАЯ ЗАЯВКА С САЙТА\n\nИмя: ${name}\nТелефон: ${phone}\nТовар: ${product || "Не выбран"}`;
+// Формируем красивое сообщение с эмодзи и табуляцией
+const message = [
+  "🚀 НОВАЯ ЗАЯВКА С САЙТА",
+  "━━━━━━━━━━━━━━━━━━",
+  `👤 Клиент:    ${name}`,
+  `📞 Телефон:   ${phone}`,
+  `📦 Модель:    ${product || "Общая консультация"}`,
+  "━━━━━━━━━━━━━━━━━━",
+  `⏰ Время:     ${new Date().toLocaleTimeString('ru-RU')} (МСК)`
+].join('\n');
 
   try {
     const url = `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`;
