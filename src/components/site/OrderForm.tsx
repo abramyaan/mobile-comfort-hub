@@ -32,7 +32,7 @@ const reviews = [
 
 // ТВОИ ДАННЫЕ (Вставь токен сюда)
 const TG_TOKEN = "8582073233:AAGEmpq0gFzV6h_sujoJW7hjMPUAZSDkGUc"; 
-const CHAT_ID = "-1005177306707";
+const CHAT_ID = "-5177306707";
 
 export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
   const [name, setName] = useState("");
