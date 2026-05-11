@@ -143,3 +143,27 @@
     color: var(--color-foreground);
   }
 }
+
+@layer base {
+  /* Твой существующий код... */
+
+  html {
+    scroll-behavior: smooth;
+    /* Улучшает отзывчивость нажатий на мобилках */
+    touch-action: manipulation;
+  }
+
+  /* Магическое свойство для ускорения: 
+     браузер не будет тратить силы на блоки, которые еще не видны */
+  section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 500px;
+  }
+
+  /* Принудительно включаем видеокарту для плавности анимаций */
+  .transform-gpu {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+}

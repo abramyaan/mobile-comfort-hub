@@ -7,7 +7,6 @@ import {
   Ruler, 
   Container, 
   Weight, 
-  Users, 
   Factory, 
   ShieldCheck 
 } from "lucide-react";
@@ -29,7 +28,6 @@ export function CabinDialog({ cabin, onClose, onBuy }: {
   const specs = [
     { label: "Габариты", value: cabin.size, icon: Ruler },
     { label: "Вес", value: cabin.weight, icon: Weight },
-    { label: "Посещений", value: cabin.visits, icon: Users },
     { label: "Бак", value: cabin.tank, icon: Container },
     { label: "Производство", value: cabin.manufacturer, icon: Factory },
     { label: "Гарантия", value: cabin.warranty, icon: ShieldCheck },
@@ -37,16 +35,14 @@ export function CabinDialog({ cabin, onClose, onBuy }: {
 
   return (
     <Dialog open={!!cabin} onOpenChange={(v) => !v && onClose()}>
-      {/* Максимальная высота 95vh и уменьшенные отступы p-3 для мобильных[cite: 9, 11] */}
       <DialogContent className="max-w-[95vw] sm:max-w-3xl rounded-[1.5rem] p-3 sm:p-8 overflow-y-auto max-h-[95vh] outline-none border-none">
-        <DialogHeader className="mb-1 sm:mb-2">
-          {/* Уплотненный заголовок[cite: 9, 11] */}
-          <DialogTitle className="text-lg sm:text-2xl font-black text-left whitespace-pre-line leading-tight">
+        <DialogHeader className="mb-1 sm:mb-2 text-center">
+          <DialogTitle className="text-lg sm:text-2xl font-black text-center whitespace-pre-line leading-tight">
             {cabin.name}
           </DialogTitle>
         </DialogHeader>
 
-        {/* Слайдер стал чуть меньше на мобильных[cite: 9, 11] */}
+        {/* Слайдер изображений */}
         <div className="relative overflow-hidden rounded-2xl bg-secondary/50 border border-border">
           <img 
             src={cabin.images[idx]} 
@@ -71,31 +67,51 @@ export function CabinDialog({ cabin, onClose, onBuy }: {
           )}
         </div>
 
-        {/* Сетка характеристик стала плотнее[cite: 9, 11] */}
+        {/* Технические характеристики */}
         <div className="mt-3 sm:mt-6">
-          <h4 className="font-bold text-sm sm:text-lg mb-2">Технические характеристики</h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5 sm:gap-3">
-            {specs.map((s, i) => (
-              <div key={i} className="flex flex-col gap-0 p-2 sm:p-4 rounded-xl bg-secondary/30 border border-border/50">
-                <div className="flex items-center gap-1 text-primary">
-                  <s.icon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                  <span className="text-[8px] sm:text-[10px] uppercase font-black tracking-wider opacity-60 leading-none">{s.label}</span>
+          <h4 className="font-bold text-sm sm:text-lg mb-2 text-center">Технические характеристики</h4>
+          <div className="flex flex-wrap gap-1.5 sm:gap-3 justify-center">
+            {specs.map((s, i) => {
+              const isWarranty = s.label === "Гарантия";
+              return (
+                <div 
+                  key={i} 
+                  className={`
+                    flex flex-col items-center text-center p-2 sm:p-4 rounded-xl bg-secondary/30 border border-border/50
+                    /* Мобилка: по 2 в ряд, Гарантия на всю ширину */
+                    w-[calc(50%-0.375rem)] 
+                    ${isWarranty ? 'w-full' : ''} 
+                    /* ПК: по 3 в ряд */
+                    sm:w-[calc(33.33%-0.75rem)]
+                  `}
+                >
+                  <div className="flex items-center gap-1 text-primary">
+                    <s.icon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                    <span className="text-[8px] sm:text-[10px] uppercase font-black tracking-wider opacity-60 leading-none">
+                      {s.label}
+                    </span>
+                  </div>
+                  <p className={`
+                    text-[11px] sm:text-sm font-bold truncate mt-0.5
+                    ${isWarranty ? 'text-xs sm:text-sm uppercase' : ''}
+                  `}>
+                    {isWarranty ? "ГАРАНТИЯ 12 МЕС" : s.value}
+                  </p>
                 </div>
-                <p className="text-[11px] sm:text-sm font-bold truncate">{s.value}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
-        {/* Описание без лишнего текста[cite: 9, 10, 11] */}
-        <div className="mt-3 sm:mt-6 space-y-0.5">
+        {/* Описание */}
+        <div className="mt-3 sm:mt-6 space-y-0.5 text-center">
           <h4 className="font-bold text-sm sm:text-lg">Описание</h4>
           <p className="text-muted-foreground leading-tight text-[11px] sm:text-base">
             {cabin.description}
           </p>
         </div>
 
-        {/* Компактный футер[cite: 9, 11] */}
+        {/* Цены и кнопка */}
         <div className="mt-4 sm:mt-6 flex flex-col gap-2 sm:gap-3">
           <div className="grid grid-cols-2 gap-2">
             <div className="bg-secondary/50 p-2 sm:p-4 rounded-xl border border-border text-center">
@@ -111,7 +127,7 @@ export function CabinDialog({ cabin, onClose, onBuy }: {
             className="h-12 sm:h-16 rounded-xl sm:rounded-2xl text-base sm:text-xl font-black shadow-lg" 
             onClick={() => onBuy(cabin.name)}
           >
-            Заказать
+            Оставить заявку
           </Button>
         </div>
       </DialogContent>

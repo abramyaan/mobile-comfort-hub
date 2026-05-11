@@ -115,7 +115,7 @@ export function OrderModal({ open, onOpenChange }: { open: boolean; onOpenChange
             Оставьте заявку
           </h2>
           <p className="text-muted-foreground text-sm mt-2">
-            Перезвоним в течение 15 минут
+            Закажите у нас и получите заправку бака - резервуара в подарок
           </p>
 
           <form onSubmit={submit} className="mt-8 space-y-4">

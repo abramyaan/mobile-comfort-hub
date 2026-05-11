@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { cabins, type Cabin } from "@/data/catalog";
 import { CabinDialog } from "./CabinDialog";
-import { CheckCircle2, ShieldCheck, Zap, Droplets, Lightbulb, ThermometerSnowflake, ArrowRight } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Zap, Droplets, Lightbulb, ThermometerSnowflake, Info, ClipboardList } from "lucide-react";
 
 const fmt = (n: number) => "от " + new Intl.NumberFormat("ru-RU").format(n);
 
@@ -23,7 +23,7 @@ export function Catalog({ onBuy }: { onBuy: (name: string) => void }) {
         <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
           <h2 className="text-4xl font-black tracking-tight md:text-6xl">Каталог</h2>
           <p className="max-w-md text-lg text-muted-foreground">
-            Нажмите на фото для подробностей или выберите модель для заказа.
+            Нажмите на подробности для информации или оставьте заявку на модель.
           </p>
         </div>
 
@@ -31,9 +31,9 @@ export function Catalog({ onBuy }: { onBuy: (name: string) => void }) {
           {cabins.map((c) => (
             <div
               key={c.id}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl w-full max-w-[360px]"
+              className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card text-left shadow-sm transition-all transform-gpu will-change-transform hover:-translate-y-1 hover:shadow-xl w-full max-w-[360px]"
             >
-              {/* Клик по фото открывает диалог с инфой */}
+              {/* Клик по фото открывает диалог */}
               <div 
                 className="aspect-square overflow-hidden bg-secondary/60 cursor-pointer"
                 onClick={() => setActive(c)}
@@ -42,6 +42,7 @@ export function Catalog({ onBuy }: { onBuy: (name: string) => void }) {
                   src={c.images[0]}
                   alt={c.name}
                   loading="lazy"
+                  decoding="async"
                   width={800}
                   height={800}
                   className="h-full w-full object-contain p-6 transition-transform group-hover:scale-105"
@@ -68,14 +69,24 @@ export function Catalog({ onBuy }: { onBuy: (name: string) => void }) {
                     </div>
                   </div>
                   
-                  {/* Кнопка "Выбрать" теперь сразу кидает на форму (OrderForm) */}
-                  <button 
-                    onClick={() => onBuy(c.name)}
-                    className="flex items-center justify-center gap-2 rounded-xl bg-primary/10 py-3 text-sm font-bold text-primary transition-all hover:bg-primary hover:text-primary-foreground active:scale-95"
-                  >
-                    Выбрать
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
+                  {/* Две кнопки: Подробнее выше, Оставить заявку ниже */}
+                  <div className="flex flex-col gap-2">
+                    <button 
+                      onClick={() => setActive(c)}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-secondary py-3 text-sm font-bold text-foreground transition-all hover:bg-secondary/80 active:scale-95"
+                    >
+                      <Info className="h-4 w-4" />
+                      Подробнее
+                    </button>
+                    
+                    <button 
+                      onClick={() => onBuy(c.name)}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-95 shadow-md shadow-primary/20"
+                    >
+                      <ClipboardList className="h-4 w-4" />
+                      Оставить заявку
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

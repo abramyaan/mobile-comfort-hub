@@ -24,13 +24,22 @@ const reviews = [
     text: "Заказала туалет. Выбрала. Быстро договорились и привезли на следующий день. Поставили на нужное место. Спасибо. Продавца рекомендую"
   },
   {
+    name: "Дмитрий С.",
+    image: "/placeholder.svg", // Заглушка
+    text: "Понравился подход к делу. Всё четко, без лишней воды. Привезли кабину вовремя, установили. Сама кабина чистая, пластик качественный. Рекомендую как надежного поставщика."
+  },
+  {
     name: "Валентин Егоров",
     image: otziv3,
     text: "Заказал новую кабинку на дачу. Привезли, помогли поставить. Дефектов нет. Внутри кабинки нет никаких сквозняков. Качеством и доставкой доволен. Рекомендую!"
+  },
+  {
+    name: "Елена Костромина",
+    image: "/placeholder.svg", // Заглушка
+    text: "Брали в аренду на время проведения мероприятия. Очень порадовал сервис: приехали, обслужили, вовремя забрали. Будем обращаться еще!"
   }
 ];
 
-// ТВОИ ДАННЫЕ (Вставь токен сюда)
 const TG_TOKEN = "8582073233:AAGEmpq0gFzV6h_sujoJW7hjMPUAZSDkGUc"; 
 const CHAT_ID = "-5177306707";
 
@@ -75,74 +84,77 @@ export const OrderForm = forwardRef<OrderFormHandle>((_, ref) => {
     setPhone(formatted);
   };
 
-  // ФУНКЦИЯ ОТПРАВКИ НАПРЯМУЮ В ТЕЛЕГРАМ
   const submit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  const phoneDigits = phone.replace(/\D/g, "");
-  
-  if (honeypot) return; 
-  if (name.trim().length < 2) {
-    toast.error("Введите корректное имя");
-    return;
-  }
-  if (phoneDigits.length !== 11) {
-    toast.error("Номер должен содержать 11 цифр");
-    return;
-  }
-// Формируем красивое сообщение с эмодзи и табуляцией
-const message = [
-  "🚀 НОВАЯ ЗАЯВКА С САЙТА",
-  "━━━━━━━━━━━━━━━━━━",
-  `👤 Клиент:    ${name}`,
-  `📞 Телефон:   ${phone}`,
-  `📦 Модель:    ${product || "Общая консультация"}`,
-  "━━━━━━━━━━━━━━━━━━",
-  `⏰ Время:     ${new Date().toLocaleTimeString('ru-RU')} (МСК)`
-].join('\n');
-
-  try {
-    const url = `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
-        // parse_mode: "Markdown" // УДАЛИ ЭТУ СТРОКУ для теста
-      }),
-    });
-
-    const result = await response.json();
-    console.log("Результат от Telegram:", result); // СМОТРИ СЮДА В КОНСОЛИ
-
-    if (response.ok && result.ok) {
-      toast.success("Заявка успешно отправлена в группу!");
-      setName("");
-      setPhone("+7 ");
-      setProduct("");
-    } else {
-      // Если Telegram вернул 400, здесь будет написано почему
-      console.error("Детали ошибки:", result.description);
-      toast.error(`Ошибка: ${result.description}`);
+    e.preventDefault();
+    const phoneDigits = phone.replace(/\D/g, "");
+    
+    if (honeypot) return; 
+    if (name.trim().length < 2) {
+      toast.error("Введите корректное имя");
+      return;
     }
-  } catch (error) {
-    console.error("Ошибка запроса:", error);
-    toast.error("Ошибка сети");
-  }
-};
+    if (phoneDigits.length !== 11) {
+      toast.error("Номер должен содержать 11 цифр");
+      return;
+    }
+
+    const message = [
+      "🚀 НОВАЯ ЗАЯВКА С САЙТА",
+      "━━━━━━━━━━━━━━━━━━",
+      `👤 Клиент:    ${name}`,
+      `📞 Телефон:   ${phone}`,
+      `📦 Модель:    ${product || "Общая консультация"}`,
+      "━━━━━━━━━━━━━━━━━━",
+      `⏰ Время:     ${new Date().toLocaleTimeString('ru-RU')} (МСК)`
+    ].join('\n');
+
+    try {
+      const url = `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.ok) {
+        toast.success("Заявка успешно отправлена!");
+        setName("");
+        setPhone("+7 ");
+        setProduct("");
+      } else {
+        toast.error(`Ошибка: ${result.description}`);
+      }
+    } catch (error) {
+      toast.error("Ошибка сети");
+    }
+  };
 
   return (
     <section id="order" className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         
-        {/* Отзывы */}
+        {/* Отзывы с горизонтальным скроллом на мобилках для скорости */}
         <div className="mb-16">
           <h2 className="mb-10 text-3xl font-black md:text-5xl text-center">Отзывы наших клиентов</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex overflow-x-auto gap-6 pb-6 md:grid md:grid-cols-3 md:overflow-visible md:pb-0">
             {reviews.map((r, i) => (
-              <div key={i} className="flex flex-col rounded-[2rem] border border-border bg-card p-6 shadow-sm">
+              <div 
+                key={i} 
+                className="flex flex-col min-w-[280px] md:min-w-0 rounded-[2rem] border border-border bg-card p-6 shadow-sm transition-transform transform-gpu hover:shadow-md"
+              >
                 <div className="flex items-center gap-4 mb-4">
-                  <img src={r.image} alt={r.name} className="h-14 w-14 rounded-full object-cover border-2 border-primary/20" />
+                  <img 
+                    src={r.image} 
+                    alt={r.name} 
+                    loading="lazy"
+                    decoding="async"
+                    className="h-14 w-14 rounded-full object-cover border-2 border-primary/20" 
+                  />
                   <div>
                     <p className="font-bold text-lg leading-tight">{r.name}</p>
                     <div className="flex text-yellow-500 mt-1">
@@ -157,13 +169,14 @@ const message = [
         </div>
 
         {/* Форма */}
-        <div className="overflow-hidden rounded-[3rem] bg-card border border-border shadow-2xl">
+        <div className="overflow-hidden rounded-[3rem] bg-card border border-border shadow-2xl transform-gpu">
           <div className="grid md:grid-cols-2">
             
             <div className="relative min-h-[450px] bg-muted">
               <iframe 
                 src="https://yandex.ru/map-widget/v1/?ll=30.603908%2C59.717133&z=16&pt=30.603908%2C59.717133,pm2rdm"
                 className="absolute inset-0 h-full w-full grayscale-[0.2]"
+                loading="lazy"
                 frameBorder="0"
                 allowFullScreen
               />

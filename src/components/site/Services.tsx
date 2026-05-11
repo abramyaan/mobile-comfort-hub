@@ -1,4 +1,5 @@
-import { Truck, Wrench, Building2, CalendarDays, ShieldCheck, Recycle, Droplets, Sparkles, ChevronRight } from "lucide-react";
+import { Truck, Wrench, Building2, CalendarDays, ShieldCheck, Recycle, Droplets, Sparkles, ChevronRight, ClipboardList } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const items = [
   { 
@@ -47,18 +48,34 @@ export function Services() {
   return (
     <section id="services" className="py-20 md:py-28 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
-        <div className="flex items-end justify-between">
+        
+        {/* Шапка секции: Текст слева, Кнопка справа */}
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="flex-1">
-            <h2 className="text-4xl font-black tracking-tight md:text-6xl text-foreground">Наши услуги</h2>
+            <h2 className="text-4xl font-black tracking-tight md:text-6xl text-foreground">
+              Наши услуги
+            </h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Обеспечиваем полный цикл обслуживания мобильных кабин: от разовой доставки до регулярного сервиса.
+              Обеспечиваем полный цикл сервисного обслуживания мобильных туалетных кабин.
             </p>
           </div>
           
-          {/* Прозрачная анимированная стрелка для мобилок */}
-          <div className="flex flex-col items-center gap-1 md:hidden opacity-40 animate-pulse mb-2">
-            <span className="text-[10px] uppercase font-bold tracking-widest">Листайте</span>
-            <ChevronRight className="h-5 w-5 animate-bounce-x" />
+          <div className="flex items-center gap-4">
+            <Button 
+              asChild
+              className="h-12 px-6 rounded-xl bg-primary font-bold shadow-lg shadow-primary/20 transition-transform active:scale-95"
+            >
+              <a href="#order" className="flex items-center gap-2">
+                <ClipboardList className="h-4 w-4" />
+                Оставить заявку
+              </a>
+            </Button>
+
+            {/* Прозрачная анимированная стрелка для мобилок */}
+            <div className="flex flex-col items-center gap-1 md:hidden opacity-40 animate-pulse">
+              <span className="text-[10px] uppercase font-bold tracking-widest">Листайте</span>
+              <ChevronRight className="h-5 w-5 animate-bounce-x" />
+            </div>
           </div>
         </div>
 
@@ -71,7 +88,9 @@ export function Services() {
             <div 
               key={it.title} 
               className="
-                min-w-[85vw] snap-center rounded-3xl border border-border bg-card p-7 transition-all hover:shadow-lg hover:border-primary/50
+                min-w-[85vw] snap-center rounded-3xl border border-border bg-card p-7 
+                transition-all transform-gpu will-change-transform
+                hover:shadow-lg hover:border-primary/50
                 md:min-w-0 md:snap-align-none
               "
             >
