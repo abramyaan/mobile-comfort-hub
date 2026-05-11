@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
-import legacy from "@vitejs/plugin-legacy";
 
 export default defineConfig({
   plugins: [
@@ -15,31 +14,27 @@ export default defineConfig({
     react(),
     tailwindcss(),
     tsconfigPaths(),
-    legacy({
-      // Генерирует код, понятный для старых версий Android и Chrome
-      targets: ["defaults", "not IE 11", "android > 4.4"],
-      renderLegacyChunks: true,
-      polyfills: true,
-    }),
+    // Убрали legacy плагин, который вызывал ошибку трансформации иконок
   ],
   base: "/mobile-comfort-hub/",
   build: {
-    // Минификация terser должна быть строго в корне объекта build
-    minify: "terser",
+    // Устанавливаем современный стандарт. 
+    // Все смартфоны последних 5-7 лет его понимают.
+    target: "esnext", 
     outDir: "dist",
     emptyOutDir: true,
-    sourcemap: false,
+    minify: "terser",
     terserOptions: {
       compress: {
-        drop_console: true, // Убирает console.log для ускорения работы
+        drop_console: true,
         pure_funcs: ["console.info", "console.debug"],
       },
       format: {
-        comments: false, // Удаляет комментарии, уменьшая вес файлов
+        comments: false,
       },
     },
+    sourcemap: false,
     rollupOptions: {
-      // Здесь мы оставляем только логику разделения кода
       output: {
         manualChunks: {
           vendor: ["react", "react-dom", "lucide-react"],
