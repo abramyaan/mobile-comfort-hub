@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
-import legacy from "@vitejs/plugin-legacy"; // Импорт плагина для старых устройств
+import legacy from "@vitejs/plugin-legacy";
 
 export default defineConfig({
   plugins: [
@@ -16,25 +16,31 @@ export default defineConfig({
     tailwindcss(),
     tsconfigPaths(),
     legacy({
-      // Генерирует облегченный JS для старых версий Android и Chrome
+      // Генерирует код, понятный для старых версий Android и Chrome
       targets: ["defaults", "not IE 11", "android > 4.4"],
+      renderLegacyChunks: true,
+      polyfills: true,
     }),
   ],
   base: "/mobile-comfort-hub/",
   build: {
+    // Минификация terser должна быть строго в корне объекта build
+    minify: "terser",
     outDir: "dist",
     emptyOutDir: true,
-    minify: "terser", // Используем установленный terser для мощного сжатия
+    sourcemap: false,
     terserOptions: {
       compress: {
-        drop_console: true, // Убирает логи из кода, ускоряя выполнение JS
+        drop_console: true, // Убирает console.log для ускорения работы
         pure_funcs: ["console.info", "console.debug"],
       },
+      format: {
+        comments: false, // Удаляет комментарии, уменьшая вес файлов
+      },
     },
-    sourcemap: false,
     rollupOptions: {
+      // Здесь мы оставляем только логику разделения кода
       output: {
-        // Разбиваем код на части, чтобы старый телефон не зависал при загрузке
         manualChunks: {
           vendor: ["react", "react-dom", "lucide-react"],
         },
