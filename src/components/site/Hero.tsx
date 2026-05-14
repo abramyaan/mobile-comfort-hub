@@ -48,10 +48,7 @@ export function Hero() {
               decoding="async"
               className="max-h-[30vh] md:max-h-none w-full rounded-[2rem] border border-border shadow-2xl"
               style={{ contentVisibility: 'auto' } as any}
-            />
-            <p className="mt-2 text-center text-xs text-muted-foreground uppercase tracking-widest font-semibold">
-              В аренду выставляются только новые туалетные кабины
-            </p>
+            /> 
           </div>
         </div>
       </div>

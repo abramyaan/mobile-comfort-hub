@@ -9,6 +9,9 @@ import { MapPin, Star } from "lucide-react";
 import otziv1 from "@/assets/otziv1.jpg";
 import otziv2 from "@/assets/otziv2.jpg";
 import otziv3 from "@/assets/otziv3.jpg";
+import otziv4 from "@/assets/otziv4.png";
+import otziv5 from "@/assets/otziv5.png";
+import otziv6 from "@/assets/otziv6.jpg";
 
 export type OrderFormHandle = { setProduct: (name: string) => void };
 
@@ -25,7 +28,7 @@ const reviews = [
   },
   {
     name: "Дмитрий С.",
-    image: "/placeholder.svg", // Заглушка
+    image: otziv4, // Заглушка
     text: "Понравился подход к делу. Всё четко, без лишней воды. Привезли кабину вовремя, установили. Сама кабина чистая, пластик качественный. Рекомендую как надежного поставщика."
   },
   {
@@ -35,8 +38,13 @@ const reviews = [
   },
   {
     name: "Елена Костромина",
-    image: "/placeholder.svg", // Заглушка
+    image: otziv5, // Заглушка
     text: "Брали в аренду на время проведения мероприятия. Очень порадовал сервис: приехали, обслужили, вовремя забрали. Будем обращаться еще!"
+  },
+  {
+    name: "Александр Волков",
+    image: otziv6,
+    text: "Заказывал сразу три кабины для строительной площадки. Цена адекватная, привезли быстро. Пластик реально антивандальный, проверено временем. Сервисное обслуживание тоже на высоте."
   }
 ];
 

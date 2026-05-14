@@ -8,7 +8,7 @@ const fmt = (n: number) => "от " + new Intl.NumberFormat("ru-RU").format(n);
 const features = [
   { icon: ShieldCheck, text: "Прочный антивандальный пластик" },
   { icon: Droplets, text: "Накопительный бак (250 л)" },
-  { icon: CheckCircle2, text: "Внутренняя задвижка и индикатор Свободно/Занято" },
+  { icon: CheckCircle2, text: "Крючок для одежды и диспансер для бумаги" },
   { icon: Zap, text: "Система естественной вентиляции" },
   { icon: Lightbulb, text: "Светопроницаемая крыша" },
   { icon: ThermometerSnowflake, text: "Морозоустойчивые добавки в пластике" },
